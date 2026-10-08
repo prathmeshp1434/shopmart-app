@@ -1,0 +1,11 @@
+{% extends 'products.html' %}
+{% block content %}
+<div style="max-width: 350px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+    <h2>📱 Mobile Login</h2>
+    <form action="/login" method="POST">
+        <label>Enter Mobile Number:</label><br><br>
+        <input type="tel" name="mobile" pattern="[0-9]{10}" placeholder="10-digit number" required style="width: 100%; padding: 8px;"><br><br>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #2874f0; color: white; border: none; border-radius: 4px;">Get OTP</button>
+    </form>
+</div>
+{% endblock %}

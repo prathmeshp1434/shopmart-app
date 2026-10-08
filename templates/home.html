@@ -1,0 +1,40 @@
+<!-- templates/home.html -->
+{% extends 'products.html' %}
+
+{% block content %}
+
+    
+   <div class="container">
+    <div class="product-grid">
+        {% if products %}
+            {% for prod in products %}
+                <div class="product-card">
+                    
+                    <img src="{{ prod.image_url }}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/475569?text=No+Image+Available';" alt="{{ prod.name }}" class="product-img">
+
+                    <div class="product-info">
+                        <span class="category-badge">{{ prod.category.name }}</span>
+                        <h3 class="product-title">{{ prod.name }}</h3>
+                        <div class="price">₹{{ prod.price }}</div>
+                        <div class="stock">Stock: {{ prod.stock }} available</div>
+
+                        <a href="/add-to-cart/{{ prod.id }}" class="buy-btn">Add to Cart</a>
+                        {% if session.get('is_admin')%}
+                            <form action='/delete-product/{{prod.id}}' method="POST" style="margin-top: 5px;">
+                            <button type="submit" onclick="return confirm('Kya aap sachme ye product delete karna chahte hain?')" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; width: 100%; cursor: pointer;">🗑️ Delete Product</button>
+                            </form>
+                       {%endif%}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-products">
+                ❌ Koi product nahi mila! <br><br>
+                <a href="/" style="color:#2874f0; text-decoration:none; font-weight:bold;">← View All Products</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

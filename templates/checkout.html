@@ -1,0 +1,133 @@
+{% extends 'products.html' %}
+
+{% block content %}
+<style>
+    
+    .checkout-card {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 25px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        font-family: Arial, sans-serif;
+    }
+
+    .checkout-header {
+        font-size: 20px;
+        font-weight: bold;
+        color: #212121;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+    }
+
+    /* ऑर्डर समरी बॉक्स */
+    .summary-box {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #e9ecef;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #444;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 17px;
+        font-weight: bold;
+        color: #388e3c;
+        border-top: 1px dashed #ccc;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    /* इनपुट बॉक्स स्टाइल */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+        resize: vertical;
+    }
+
+    .form-group textarea:focus {
+        border-color: #2874f0;
+        box-shadow: 0 0 5px rgba(40, 116, 240, 0.3);
+    }
+
+    /* प्रीमियम ऑरेंज बटन (Flipkart Style) */
+    .btn-orange-checkout {
+        width: 100%;
+        background-color: #fb641b;
+        color: #ffffff;
+        padding: 14px;
+        font-size: 17px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transition: background 0.2s ease;
+    }
+
+    .btn-orange-checkout:hover {
+        background-color: #e65100;
+    }
+</style>
+
+<div class="checkout-card">
+    <div class="checkout-header">🛒 Checkout & Order Summary</div>
+
+    <!-- 1. Order Items Summary -->
+    <div class="summary-box">
+        <div style="font-weight: bold; margin-bottom: 10px; color: #555;">Your Items:</div>
+        {% for item in cart_items %}
+        <div class="summary-item">
+            <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+            <span>₹{{ item.item_total }}</span>
+        </div>
+        {% endfor %}
+
+        <div class="summary-total">
+            <span>Total Amount</span>
+            <span>₹{{ grand_total }}</span>
+        </div>
+    </div>
+
+    <!-- 2. Delivery Address Form -->
+    <form action="/checkout" method="POST">
+        <div class="form-group">
+            <label for="address">Delivery Address</label>
+            <textarea name="address" id="address" rows="3" placeholder="Enter your full address with pincode..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-orange-checkout">
+            ⚡ Place Order (₹{{ grand_total }})
+        </button>
+    </form>
+</div>
+{% endblock %}

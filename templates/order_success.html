@@ -1,0 +1,83 @@
+{% extends 'products.html' %}
+
+{% block content %}
+<style>
+    
+    .success-card {
+        max-width: 450px;
+        margin: 40px auto;
+        padding: 35px 25px;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    
+    .success-icon {
+        width: 70px;
+        height: 70px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        margin: 0 auto 15px auto;
+        box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
+    }
+
+    /* आर्डर आईडी का स्टाइलिश बैज */
+    .order-id-badge {
+        background: #eef4ff;
+        color: #2874f0;
+        padding: 8px 18px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: bold;
+        font-size: 15px;
+        margin: 15px 0;
+        border: 1px dashed #2874f0;
+    }
+
+    /* शॉपिंग बटन */
+    .btn-shop-more {
+        display: block;
+        width: 100%;
+        background-color: #2874f0;
+        color: #ffffff;
+        padding: 13px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(40, 116, 240, 0.25);
+        box-sizing: border-box;
+        margin-top: 20px;
+        transition: background 0.2s ease;
+    }
+
+    .btn-shop-more:hover {
+        background-color: #1259cc;
+        color: white;
+    }
+</style>
+
+<div class="success-card">
+    <div class="success-icon">✓</div>
+    <h2 style="color: #2e7d32; margin-bottom: 5px; font-size: 22px;">Order Placed Successfully!</h2>
+    <p style="color: #666; font-size: 14px; margin-top: 0;">Thank you for your purchase.</p>
+
+    <div class="order-id-badge">
+        Order ID: #{{ order_id }}
+    </div>
+
+    <p style="color: #555; font-size: 14px; line-height: 1.5; margin: 15px 0;">
+        Your order details have been saved in our database. We are preparing your shipment! 📦
+    </p>
+
+    <a href="/" class="btn-shop-more">🛍️ Continue Shopping</a>
+</div>
+{% endblock %}
