@@ -31,7 +31,7 @@ if db_url:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
     # Local Testing ke liye (PyDroid me testing ke liye)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://neondb_owner:npg_ML7lm1iChktb@ep-old-hat-b5w2jkls-pooler.c-7.us-east-2.aws.neon.tech/neondb'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
