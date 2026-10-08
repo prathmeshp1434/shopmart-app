@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>ShopMart App</title>
+    <style>
+         /* Sidebar Main Panel */
+.sidebar {
+  height: 100%;
+  width: 280px;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: -280px; /
+  background-color: #ffffff;
+  overflow-x: hidden;
+  transition: 0.3s ease-in-out;
+  padding-top: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+
+/* Sidebar Links */
+.sidebar a {
+  padding: 12px 20px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #333333;
+  display: block;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #f1f1f1;
+  color: #2874f0;
+}
+
+/* Profile Header Section */
+.user-profile-header {
+  padding: 10px 20px;
+  background-color: #2874f0;
+  color: white;
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
+.user-profile-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.user-profile-header p {
+  margin: 5px 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.sidebar-login-btn {
+  display: inline-block !important;
+  background-color: #ff9f00;
+  color: white !important;
+  padding: 5px 12px !important;
+  border-radius: 4px;
+  font-size: 12px !important;
+  margin-top: 5px;
+}
+
+/* Special Styling for Close & Admin links */
+.sidebar .closebtn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  color: white;
+}
+
+.sidebar-divider {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 10px 0;
+}
+
+.admin-link {
+  color: #d32f2f !important;
+}
+
+.logout-link {
+  color: #757575 !important;
+}
+
+/* Open Button Styling */
+.open-btn {
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #2874f0;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Dark Background Overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f1f3f6; }
+        
+        /* Navbar Styling */
+        .navbar { background-color: #2874f0; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar h1 { margin: 0; font-size: 22px; cursor: pointer; }
+        
+        /* Search Box Styling */
+        .search-box { display: flex; width: 40%; }
+        .search-box input { width: 100%; padding: 10px 15px; border: none; border-radius: 4px 0 0 4px; outline: none; font-size: 15px; }
+        .search-box button { padding: 10px 20px; background: #ffe11b; border: none; font-weight: bold; cursor: pointer; border-radius: 0 4px 4px 0; color: #212121; }
+        
+      
+      
+        /* -------------------------------------------------- */
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .cart-btn { background: #ffe11b; color: #212121; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        /* -------------------------------------------------- */
+
+        .add-btn { background: #fb641b; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .add-btn:hover { background: #e65100; }
+        
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+        
+        /* Shopmart Card Grid Styling */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+.product-card { 
+    background: white; 
+    border-radius: 8px; 
+    padding: 0; 
+    overflow: hidden; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); 
+    text-align: center; 
+    transition: transform 0.2s, box-shadow 0.2s; 
+}
+
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    display: block;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+        .product-title { font-size: 18px; margin: 10px 0 5px 0; color: #212121; }
+        .price { color: #388e3c; font-size: 22px; font-weight: bold; margin: 10px 0; }
+        .category-badge { background: #e0e0e0; font-size: 12px; padding: 4px 8px; border-radius: 12px; color: #555; text-transform: uppercase; font-weight: bold; }
+        .stock { font-size: 13px; color: #878787; margin-bottom: 15px; }
+        
+        /* Buy / Cart Button CSS */
+        .buy-btn { background: #ff9f00; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; width: 100%; font-size: 14px; text-decoration: none; display: block; box-sizing: border-box; }
+        .buy-btn:hover { background: #f39200; }
+        
+        .no-products { font-size: 18px; color: #666; text-align: center; grid-column: 1 / -1; margin-top: 40px; background: white; padding: 30px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+<!-- ========================================== -->
+<!-- 1. TOP NAVBAR (Header Strip)               -->
+<!-- ========================================== -->
+<div class="navbar">
+    <!-- Logo -->
+    <h1 onclick="window.location.href='/'">🛒 ShopMart Store</h1>
+    
+    <!-- Search Bar Form -->
+    <form action="/" method="GET" class="search-box" id="searchForm">
+        <input type="text" name="q" id="searchInput" placeholder="Search for products, brands and more..." value="{{ search_query }}" autocomplete="off">
+        <button type="submit">🔍 Search</button>
+    </form>
+
+    
+    <div class="nav-links">
+          <a href="/cart" class="cart-btn">🛒 Cart ({{ session.get('cart', {}).values() | sum }})</a>
+        <button class="open-btn" onclick="openNav()">☰ Menu</button>
+        
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. SLIDE-OUT SIDEBAR    -->
+<!-- ========================================== -->
+<div id="mySidebar" class="sidebar">
+  <!-- Close Button (X) -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">✕</a>
+
+  <!-- Profile Header Box -->
+  <div class="user-profile-header">
+      {% if session.get('user_mobile') %}
+         <h3>👤 Welcome Back</h3>
+         <p>📱 Mobile: {{ session.get('user_mobile') }}</p>
+      {% else %}
+         <h3>👤 Welcome, Guest</h3>
+         <p>📱 Mobile: Not Logged In</p>
+         <a href="/login" class="sidebar-login-btn">Login / Register</a>
+      {% endif %}
+  </div>
+
+  <hr class="sidebar-divider">
+
+  <!-- Navigation Links -->
+  <a href="/">🏠 Home</a>
+  <a href="/cart">🛒 My Cart</a>
+  <a href="/orders">📦 My Orders History</a>
+  <a href="#">🎧 Help & Support</a>
+  
+  
+  {% if session.get('is_admin')%}
+      <a href="/add_product" class="admin-link">➕ Add Product (Admin Only)</a>
+  {%endif%}
+
+  {% if session.get('user_mobile') %}
+      <hr class="sidebar-divider">
+      <a href="/logout" class="logout-link">🚪 Logout</a>
+  {% endif %}
+</div>
+
+<!-- Overlay Background -->
+<div id="sidebarOverlay" class="overlay" onclick="closeNav()"></div>
+
+
+    
+{% block content %}
+    {% endblock %}
+<script>
+     // Sidebar Kholne Ka Logic
+    function openNav() {
+  document.getElementById("mySidebar").style.left = "0px";
+  document.getElementById("sidebarOverlay").style.display = "block";
+}
+
+// Sidebar Band Karne Ka Logic
+    function closeNav() {
+  document.getElementById("mySidebar").style.left = "-280px";
+  document.getElementById("sidebarOverlay").style.display = "none";
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchForm = document.getElementById('searchForm');
+    const productCards = document.querySelectorAll('.product-card');
+
+    // 1. टाइप करते ही तुरंत फ़िल्टर करने का लॉजिक
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+
+        productCards.forEach(card => {
+            const title = card.querySelector('.product-title').innerText.toLowerCase();
+            
+            if (title.includes(query)) {
+                card.style.display = ''; // प्रोडक्ट स्क्रीन पर दिखाओ
+            } else {
+                card.style.display = 'none'; // प्रोडक्ट छुपा दो
+            }
+        });
+    });
+
+    // 2. Enter या Search बटन दबाने पर पेज रीफ्रेश होने से रोकना
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // सर्वर पर Request जाने से रोकेगा
+    });
+});
+</script>
+
+
+</body>
+</html>
