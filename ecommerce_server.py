@@ -16,13 +16,18 @@ ssl_context = ssl.create_default_context()
 
 app.secret_key = os.environ.get('SECRET_KEY', 'my_super_secret_ecom_key_123')
 
-# ---------------------------------------
+
+# -------------------------------------------------------------
 # DATABASE CONNECTION SETUP
-# --------------------------------------------
+# -------------------------------------------------------------
 db_url = os.environ.get('DATABASE_URL')
 
 if db_url:
-    # Render par standard 'postgresql://' aata hai, use pg8000 ke liye update karein
+    # 1. URL se ?sslmode=... parameters ko automatically strip karein
+    if "?" in db_url:
+        db_url = db_url.split("?")[0]
+
+    # 2. pg8000 driver ke liye format update karein
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql+pg8000://", 1)
     elif db_url.startswith("postgresql://") and "+pg8000" not in db_url:
@@ -30,8 +35,8 @@ if db_url:
     
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
-    
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
+	
 	
 # -------------------------------------------------------------
 
