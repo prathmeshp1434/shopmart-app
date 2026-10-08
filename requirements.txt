@@ -1,0 +1,5 @@
+Flask
+Flask-SQLAlchemy
+pg8000
+gunicorn
+sqlalchemy
