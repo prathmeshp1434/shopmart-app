@@ -16,9 +16,9 @@ ssl_context = ssl.create_default_context()
 
 app.secret_key = os.environ.get('SECRET_KEY', 'my_super_secret_ecom_key_123')
 
-# -------------------------------------------------------------
+# ---------------------------------------
 # DATABASE CONNECTION SETUP
-# -------------------------------------------------------------
+# --------------------------------------------
 db_url = os.environ.get('DATABASE_URL')
 
 if db_url:
@@ -30,18 +30,12 @@ if db_url:
     
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
-    # Local Testing ke liye (PyDroid me testing ke liye)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'connect_args': {
-        'ssl_context': ssl_context
-    }
-}
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
+	
 # -------------------------------------------------------------
 
-# ORM initialize किया
+# ORM initialisation 
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -57,9 +51,9 @@ class User(db.Model):
 # Database Tables Building
 
 # Table 1: Category
-class Category(db.Model):  # <-- C बड़ा, M बड़ा (db.Model)
-    id = db.Column(db.Integer, primary_key=True)  # <-- C बड़ा, I बड़ा
-    name = db.Column(db.String(50), nullable=False, unique=True)  # <-- C बड़ा, S बड़ा
+class Category(db.Model):  
+    id = db.Column(db.Integer, primary_key=True)  
+    name = db.Column(db.String(50), nullable=False, unique=True)  
     products = db.relationship('Product', backref='category', lazy=True)
     
     def __repr__(self):
