@@ -304,7 +304,7 @@ def verify_otp():
             # Login successful: Session me user details set karein
             session['user_id'] = user.id
             session['user_name'] = user.name
-            session['user_phone'] = user.mobile
+            session['user_mobile'] = user.mobile
             session['is_admin'] = user.is_admin
             
             user.otp = None  # Use hone ke baad OTP clear kar dein
