@@ -281,6 +281,7 @@ def login():
     return render_template('login.html')
 
 # 2. Step 2: OTP Verify karne ka route
+@app.route('/verify-otp',method=['GET','POST'])
 def verify_otp():
     mobile = session.get('pending_mobile')
     if not mobile:
