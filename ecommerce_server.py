@@ -8,14 +8,10 @@ import ssl
 from sqlalchemy import text
 
 app = Flask(__name__)
-# Database connection string (with local SQLite
 
-
-# SSL Context (Neon DB ke secure connection ke liye zaroori hai)
 ssl_context = ssl.create_default_context()
 
 app.secret_key = os.environ.get('SECRET_KEY', 'my_super_secret_ecom_key_123')
-
 
 # -------------------------------------------------------------
 # DATABASE CONNECTION SETUP
@@ -32,15 +28,13 @@ if db_url:
         db_url = db_url.replace("postgres://", "postgresql+pg8000://", 1)
     elif db_url.startswith("postgresql://") and "+pg8000" not in db_url:
         db_url = db_url.replace("postgresql://", "postgresql+pg8000://", 1)
-    
+
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
-	
-	
-# -------------------------------------------------------------
 
-# ORM initialisation 
+
+# ORM initialize किया
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -56,9 +50,9 @@ class User(db.Model):
 # Database Tables Building
 
 # Table 1: Category
-class Category(db.Model):  
-    id = db.Column(db.Integer, primary_key=True)  
-    name = db.Column(db.String(50), nullable=False, unique=True)  
+class Category(db.Model):  # <-- C बड़ा, M बड़ा (db.Model)
+    id = db.Column(db.Integer, primary_key=True)  # <-- C बड़ा, I बड़ा
+    name = db.Column(db.String(50), nullable=False, unique=True)  # <-- C बड़ा, S बड़ा
     products = db.relationship('Product', backref='category', lazy=True)
     
     def __repr__(self):
@@ -281,7 +275,7 @@ def login():
     return render_template('login.html')
 
 # 2. Step 2: OTP Verify karne ka route
-@app.route('/verify-otp',methods=['GET','POST'])
+@app.route('/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
     mobile = session.get('pending_mobile')
     if not mobile:
@@ -317,9 +311,7 @@ def verify_otp():
             
     return render_template('verify_otp.html')
 
-            
-            
-            
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     # 1. Login Guard: Agar user logged in nahi hai, to pehle /login bhejo
