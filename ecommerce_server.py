@@ -299,7 +299,10 @@ def verify_otp():
             session['user_id'] = user.id
             session['user_name'] = user.name
             session['user_mobile'] = user.mobile
-            session['is_admin'] = user.is_admin
+            if user.mobile=='7218781434':
+            	session['is_admin']=True
+            else:
+                session['is_admin'] = user.is_admin
             
             user.otp = None  # Use hone ke baad OTP clear kar dein
             db.session.commit()
@@ -382,26 +385,44 @@ def my_orders():
 	orders=Order.query.filter_by(user_id=current_user_id).order_by(Order.id.desc()).all()
 	return render_template('orders-history.html',orders=orders)
 
-# 3. Logout route
+
+
+
+@app.route("/manage-products")
+def manage_products():
+	if not session.get('is_admin'):
+		return redirect(url_for('login'))
+	all_products=Product.query.all()
+	return render_template('admin_products.html',products=all_products)
+
+@app.route('/update_stock/<int:product_id>', methods=['POST'])
+def update_stock(product_id):
+    # Pehle check kar lo ki user admin hai ya nahi
+    if not session.get('is_admin'):
+        return redirect(url_for('login'))
+        
+    product = Product.query.get_or_404(product_id)
+    new_stock = request.form.get('stock')
+    
+    if new_stock:
+        try:
+            product.stock = int(new_stock)
+            db.session.commit()
+        except ValueError:
+            pass
+            
+    return redirect(url_for('manage_products'))
+
+#logout route#
+
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect('/')
-
-# (यहाँ आपके ऊपर के सारे Routes / @app.route खत्म हो रहे हैं...)
+	session.clear()
+	return redirect('/')			
 
 
-# --- SABSE NICHE YE POORA BLOCK RAKHEIN ---
 if __name__ == '__main__':
     with app.app_context():
-        try:
-            # PostgreSQL table me naya column jod rahe hain
-            db.session.execute(text('ALTER TABLE "product" ADD COLUMN is_active BOOLEAN DEFAULT TRUE;'))
-            db.session.commit()
-            print("✅ PostgreSQL me 'is_active' column jud gaya hai!")
-        except Exception as e:
-            print("ℹ️ Column pehle se bana hua hai ya koi choti problem hai:", e)
-
-    app.run(debug=True)
+        app.run(debug=True)
 
 

@@ -224,6 +224,7 @@
   
   {% if session.get('is_admin')%}
       <a href="/add_product" class="admin-link">➕ Add Product (Admin Only)</a>
+      <a href="/manage-products" class= 'admin-link'> 🛠️ Manage Products (Admin)</a>
   {%endif%}
 
   {% if session.get('user_mobile') %}
