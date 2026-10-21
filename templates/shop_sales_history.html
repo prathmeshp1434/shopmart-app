@@ -1,0 +1,104 @@
+{% extends 'products.html'%}
+{%block content %}
+
+<style>
+
+/* Custom Sales History Page Styling */
+.sales-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sales-page-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sales-table-wrapper {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.custom-sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.custom-sales-table th, .custom-sales-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-sales-table th {
+    background-color: #333;
+    color: #fff;
+}
+
+.sales-product-img {
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.sales-qty-badge {
+    background: #e2e8f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.no-sales-text {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+</style>
+
+
+<div class="sales-container">
+    <h2 class="sales-page-title">📦 Shop Selling History</h2>
+    
+    <div class="sales-table-wrapper">
+        <table class="custom-sales-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Amount</th>
+                    <th>Customer ID</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item, order, product in sales %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="50" class="sales-product-img">
+                    </td>
+                    <td><strong>{{ product.name }}</strong></td>
+                    <td><span class="sales-qty-badge">{{ item.quantity }}</span></td>
+                    <td>₹{{ item.price }}</td>
+                    <td><strong>₹{{ item.quantity * item.price }}</strong></td>
+                    <td>User #{{ order.user_id }}</td>
+                    <td>{{ order.created_at.strftime('%d-%m-%Y') if order.created_at else 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="no-sales-text">Abhi tak koi product sell nahi hua hai.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
