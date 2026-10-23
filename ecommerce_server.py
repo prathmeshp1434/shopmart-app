@@ -413,19 +413,21 @@ def update_stock(product_id):
             
     return redirect(url_for('manage_products'))
 
-@app.route("/admin/sales-history")
+@app.route("/admin-sales-history")
 def shop_sales_history():
-	if not session.get('is_admin'):
-		return redirect('logout')
-	    sales = (
+    if not session.get('is_admin'):
+        return redirect('/logout')
+        
+    sales = (
         db.session.query(OrderItem, Order, Product)
         .join(Order, OrderItem.order_id == Order.id)
         .join(Product, OrderItem.product_id == Product.id)
         .order_by(Order.id.desc())
         .all()
     )
+    
+    return render_template('shop_sales_history.html', sales=sales)
 
-    return render_template('/admin_sales_history.html',sales=sales)
 	
 
 #logout route#
