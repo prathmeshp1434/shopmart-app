@@ -417,7 +417,14 @@ def update_stock(product_id):
 def shop_sales_history():
 	if not session.get('is_admin'):
 		return redirect('logout')
-	sales=db.session.query(OrderItem,Order,Product)\.join(Order,OrderItem.order_id == Order_id)\.join(Product,product_id==Product_id)\.order_by(Order.id.desc()).all()
+	    sales = (
+        db.session.query(OrderItem, Order, Product)
+        .join(Order, OrderItem.order_id == Order.id)
+        .join(Product, OrderItem.product_id == Product.id)
+        .order_by(Order.id.desc())
+        .all()
+    )
+
     return render_template('/admin_sales_history.html',sales=sales)
 	
 
