@@ -1,0 +1,128 @@
+{% extends 'products.html' %}
+
+{% block content %}
+<div class="product-detail-container">
+    <div class="product-detail-wrapper">
+        
+        <!-- Product Image Section -->
+        <div class="product-image-section">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-detail-img">
+        </div>
+        
+        <!-- Product Info & Actions Section -->
+        <div class="product-info-section">
+            <h2 class="product-title">{{ product.name }}</h2>
+            <p class="product-price">₹{{ product.price }}</p>
+            <p class="product-meta"><strong>Category:</strong> {{ product.category }}</p>
+            <p class="product-meta"><strong>Availability:</strong> {{ product.stock }} items left in stock</p>
+            
+            <div class="product-action-buttons">
+                <!-- Add to Cart Button -->
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="product-form">
+                    <button type="submit" class="btn btn-cart">🛒 Add to Cart</button>
+                </form>
+                
+                <!-- Buy Now Button -->
+                <form action="{{ url_for('buy_now', product_id=product.id) }}" method="POST" class="product-form">
+                    <button type="submit" class="btn btn-buynow">⚡ Buy Now</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+.product-detail-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-wrapper {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.product-image-section {
+    flex: 1;
+    text-align: center;
+    min-width: 280px;
+}
+
+.product-detail-img {
+    max-width: 100%;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.product-info-section {
+    flex: 1;
+    min-width: 280px;
+}
+
+.product-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.product-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #27ae60;
+    margin-bottom: 15px;
+}
+
+.product-meta {
+    color: #666666;
+    margin-bottom: 10px;
+}
+
+.product-action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.product-form {
+    flex: 1;
+    min-width: 140px;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.btn-cart {
+    background: #ff9f00;
+    color: white;
+}
+
+.btn-cart:hover {
+    background: #f39500;
+}
+
+.btn-buynow {
+    background: #fb641b;
+    color: white;
+}
+
+.btn-buynow:hover {
+    background: #e85a14;
+}
+</style>
+{% endblock %}

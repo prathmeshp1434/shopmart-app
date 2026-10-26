@@ -2,26 +2,32 @@
 {% extends 'products.html' %}
 
 {% block content %}
-
-    
-   <div class="container">
+<div class="container">
     <div class="product-grid">
         {% if products %}
             {% for prod in products %}
                 <div class="product-card">
                     
-                    <img src="{{ prod.image_url }}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/475569?text=No+Image+Available';" alt="{{ prod.name }}" class="product-img">
-
-                    <div class="product-info">
-                        <span class="category-badge">{{ prod.category.name }}</span>
-                        <h3 class="product-title">{{ prod.name }}</h3>
-                        <div class="price">₹{{ prod.price }}</div>
-                        <div class="stock">Stock: {{ prod.stock }} available</div>
-
-                        <a href="/add-to-cart/{{ prod.id }}" class="buy-btn">Add to Cart</a>
+                    <!-- YAHAN LAGAYA HAI LINK: 
+                         Is a href ke andar image aur product ki info (naam, price) daal di hai, 
+                         taki user inme se kahin bhi click kare, toh seedha usi product ki ID wala page khul jaye. -->
+                    <a href="/product/{{ prod.id }}" style="text-decoration: none; color: inherit;">
                         
-                       
-                    </div>
+                        <img src="{{ prod.image_url }}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/475569?text=No+Image+Available';" alt="{{ prod.name }}" class="product-img">
+
+                        <div class="product-info">
+                            <span class="category-badge">{{ prod.category.name }}</span>
+                            <h3 class="product-title">{{ prod.name }}</h3>
+                            <div class="price">₹{{ prod.price }}</div>
+                            <div class="stock">Stock: {{ prod.stock }} available</div>
+                        </div>
+
+                    </a>
+
+                    <!-- DHYAN RAKHNA: "Add to Cart" button ko is link ke BAHAR rakha hai, 
+                         taki jab koi cart dabaye toh cart me item jaye, na ki detail page khule. -->
+                    <a href="/add-to-cart/{{ prod.id }}" class="buy-btn">Add to Cart</a>
+                    
                 </div>
             {% endfor %}
         {% else %}
@@ -32,6 +38,4 @@
         {% endif %}
     </div>
 </div>
-
-
 {% endblock %}

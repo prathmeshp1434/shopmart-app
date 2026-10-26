@@ -160,7 +160,7 @@ def delete_product(product_id):
 	
 	
 # 1. Product ko Cart me jodhne ke liye
-@app.route('/add-to-cart/<int:product_id>')
+@app.route('/add-to-cart/<int:product_id>',methods=['GET','POST'])
 def add_to_cart(product_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -426,9 +426,18 @@ def shop_sales_history():
         .all()
     )
     
-    return render_template('shop_sales_history.html', sales=sales)
+    return render_template('shop:_sales_history.html', sales=sales)
 
+@app.route('/product/<int:product_id>')
+def product_details(product_id):
+	product=Product.query.get_or_404(product_id)
+	return render_template('product_details.html',product=product)
 	
+@app.route('/buy-now/<int:product_id>', methods=['POST','GET'])
+def buy_now(product_id):    
+    product = Product.query.get_or_404(product_id)
+    return redirect('/cart')
+		
 
 #logout route#
 
