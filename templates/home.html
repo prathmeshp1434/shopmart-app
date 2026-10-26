@@ -8,9 +8,7 @@
             {% for prod in products %}
                 <div class="product-card">
                     
-                    <!-- YAHAN LAGAYA HAI LINK: 
-                         Is a href ke andar image aur product ki info (naam, price) daal di hai, 
-                         taki user inme se kahin bhi click kare, toh seedha usi product ki ID wala page khul jaye. -->
+                    
                     <a href="/product/{{ prod.id }}" style="text-decoration: none; color: inherit;">
                         
                         <img src="{{ prod.image_url }}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/f1f5f9/475569?text=No+Image+Available';" alt="{{ prod.name }}" class="product-img">
@@ -24,8 +22,7 @@
 
                     </a>
 
-                    <!-- DHYAN RAKHNA: "Add to Cart" button ko is link ke BAHAR rakha hai, 
-                         taki jab koi cart dabaye toh cart me item jaye, na ki detail page khule. -->
+                   
                     <a href="/add-to-cart/{{ prod.id }}" class="buy-btn">Add to Cart</a>
                     
                 </div>

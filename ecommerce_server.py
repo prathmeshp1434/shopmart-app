@@ -19,15 +19,12 @@ app.secret_key = os.environ.get('SECRET_KEY', 'my_super_secret_ecom_key_123')
 db_url = os.environ.get('DATABASE_URL')
 
 if db_url:
-    # 1. URL se ?sslmode=... parameters ko automatically strip karein
     if "?" in db_url:
         db_url = db_url.split("?")[0]
 
-    # 2. pg8000 driver ke liye format update karein
+    
     if db_url.startswith("postgres://"):
-        db_url = db_url.replace("postgres://", "postgresql+pg8000://", 1)
-    elif db_url.startswith("postgresql://") and "+pg8000" not in db_url:
-        db_url = db_url.replace("postgresql://", "postgresql+pg8000://", 1)
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 else:
@@ -220,8 +217,8 @@ def increase_qty(product_id):
     str_id = str(product_id)
     
     if str_id in cart:
-        cart[str_id] += 1        # Quantity 1 से बढ़ा दी
-        session['cart'] = cart  # Session अपडेट किया
+        cart[str_id] += 1        
+        session['cart'] = cart  
         
     return redirect('/cart')
 
