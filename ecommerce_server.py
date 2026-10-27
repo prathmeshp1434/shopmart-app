@@ -423,7 +423,7 @@ def shop_sales_history():
         .all()
     )
     
-    return render_template('shop:_sales_history.html', sales=sales)
+    return render_template('shop_sales_history.html', sales=sales)
 
 @app.route('/product/<int:product_id>')
 def product_details(product_id):
@@ -431,9 +431,19 @@ def product_details(product_id):
 	return render_template('product_details.html',product=product)
 	
 @app.route('/buy-now/<int:product_id>', methods=['POST','GET'])
-def buy_now(product_id):    
-    product = Product.query.get_or_404(product_id)
-    return redirect('/cart')
+def buy_now(product_id):
+    if 'user_id' not in session:
+    	return redirect(url_for('login'))
+    if 'cart' not in session:
+    	session['cart']={}
+    cart=session['cart']
+    str_id=str(product_id)
+    
+    cart[str_id]=cart.get(str_id,0) + 1
+    session['cart']=cart
+    
+    return redirect(url_for('view_cart'))
+    
 		
 
 #logout route#
