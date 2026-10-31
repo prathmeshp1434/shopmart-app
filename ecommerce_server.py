@@ -456,6 +456,22 @@ def logout():
 
 if __name__ == '__main__':
     with app.app_context():
-        app.run(debug=True)
+        # 1. Tables create karega agar nahi bani hongi toh
+        db.create_all()
+        
+        # 2. Check karega ki agar database bilkul khali hai, tabhi default categories dale
+        if not Category.query.first():
+            cat1 = Category(name='Electronics')
+            cat2 = Category(name='Grocery')
+            cat3 = Category(name='Fashion')
+            cat4 = Category(name='Home Appliances')
+
+            db.session.add_all([cat1, cat2, cat3, cat4])
+            db.session.commit()
+            print("Default categories added successfully!")
+
+    # 3. Server start karne wali line 'with' block ke bahar hoti hai
+    app.run(debug=True)
+
 
 
