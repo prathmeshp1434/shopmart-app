@@ -6,13 +6,20 @@ import random
 from datetime import datetime
 import ssl
 from sqlalchemy import text
+import razorpay
+from flask import render_template,request,jsonify
+
 
 app = Flask(__name__)
+
+RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID")
+RAZORPAY_SECRET_ID= os.environ.get("RAZORPAY_SECRET_ID")
+
+razorpay_client= razorpay.Client(auth=("RAZORPAY_KEY_ID","RAZORPAY_SECRET_ID"))
 
 ssl_context = ssl.create_default_context()
 
 app.secret_key = os.environ.get('SECRET_KEY', 'my_super_secret_ecom_key_123')
-
 # -------------------------------------------------------------
 # DATABASE CONNECTION SETUP
 # -------------------------------------------------------------
@@ -444,6 +451,50 @@ def buy_now(product_id):
     
     return redirect(url_for('view_cart'))
     
+
+
+
+@app.route('/create-order', methods=['POST'])
+def order_success():
+    # 1. Pata karo ki kaun sa user login hai (Session ya Flask-Login se)
+    # Maan le user ki ID session me save hai:
+    if 'user_id' not in session:
+        return jsonify({'error': 'Pehle login karo bhai!'}), 401
+    
+    current_user_id = session['user_id']
+    
+    # 2. Database ke Cart table me jao aur is user ke saare items nikalo
+    cart_items = Cart.query.filter_by(user_id=current_user_id).all()
+    
+    if not cart_items:
+        return jsonify({'error': 'Aapka cart khali hai!'}), 400
+        
+    # 3. Loop chala kar total bill calculate karo
+    total_rupees = 0
+    for item in cart_items:
+        # Maan le item ke pas product ki price aur quantity hai
+        # (Jaise: 2 t-shirt * 500 Rs = 1000 Rs)
+        total_rupees += item.product.price * item.quantity
+        
+    # 4. Ab total rupees ko Razorpay ke liye "Paise" me convert karo
+    total_in_paise = int(total_rupees * 100)
+    
+    # 5. Razorpay ko ab actual dynamic amount milega
+    order_data = {
+        'amount': total_in_paise,  # Yeh ab har user ke cart ke hisab se alag hoga!
+        'currency': 'INR',
+        'receipt': f'order_rcptid_user_{current_user_id}',
+        'payment_capture': 1
+    }
+    
+    # Razorpay server par order create hoga
+    order = razorpay_client.order.create(data=order_data)
+    
+    return jsonify({
+        'order_id': order['id'],
+        'amount': order['amount'],
+        'key': "YOUR_RAZORPAY_KEY_ID"
+    })
 		
 
 #logout route#

@@ -2,9 +2,9 @@
 
 {% block content %}
 <style>
-    
+    /* Teri banayi hui custom styling */
     .success-card {
-        max-width: 450px;
+        max-width: 480px;
         margin: 40px auto;
         padding: 35px 25px;
         background: #ffffff;
@@ -14,35 +14,6 @@
         font-family: Arial, sans-serif;
     }
 
-    
-    .success-icon {
-        width: 70px;
-        height: 70px;
-        background: #e8f5e9;
-        color: #2e7d32;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 38px;
-        margin: 0 auto 15px auto;
-        box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
-    }
-
-    /* आर्डर आईडी का स्टाइलिश बैज */
-    .order-id-badge {
-        background: #eef4ff;
-        color: #2874f0;
-        padding: 8px 18px;
-        border-radius: 20px;
-        display: inline-block;
-        font-weight: bold;
-        font-size: 15px;
-        margin: 15px 0;
-        border: 1px dashed #2874f0;
-    }
-
-    /* शॉपिंग बटन */
     .btn-shop-more {
         display: block;
         width: 100%;
@@ -52,6 +23,8 @@
         font-size: 16px;
         font-weight: bold;
         border-radius: 8px;
+        border: none;
+        cursor: pointer;
         text-decoration: none;
         box-shadow: 0 4px 12px rgba(40, 116, 240, 0.25);
         box-sizing: border-box;
@@ -66,18 +39,74 @@
 </style>
 
 <div class="success-card">
-    <div class="success-icon">✓</div>
-    <h2 style="color: #2e7d32; margin-bottom: 5px; font-size: 22px;">Order Placed Successfully!</h2>
-    <p style="color: #666; font-size: 14px; margin-top: 0;">Thank you for your purchase.</p>
+    <div style="font-size: 50px; margin-bottom: 10px;">🛒</div>
+    <h2 style="color: #2874f0; margin-bottom: 5px; font-size: 22px;">Finalize Your Order</h2>
+    <p style="color: #666; font-size: 14px; margin-top: 0;">Click below to pay securely through Razorpay.</p>
 
-    <div class="order-id-badge">
-        Order ID: #{{ order_id }}
-    </div>
-
-    <p style="color: #555; font-size: 14px; line-height: 1.5; margin: 15px 0;">
-        Your order details have been saved in our database. We are preparing your shipment! 📦
-    </p>
-
-    <a href="/" class="btn-shop-more">🛍️ Continue Shopping</a>
+    <!-- Teri custom CSS class wala Pay Now button -->
+    <button id="pay-btn" class="btn-shop-more">💳 Pay Securely Now</button>
 </div>
+
+<!-- 1. Razorpay ki official Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- 2. Dynamic Payment JavaScript Logic -->
+<script>
+    document.getElementById('pay-btn').onclick = async function (e) {
+        e.preventDefault();
+
+        try {
+            // Backend ke naye order creation route par request bhejo
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.error || "Kuch gadbad ho gayi bhai!");
+                return;
+            }
+
+            // Razorpay Options Set Karo
+            var options = {
+                "key": data.key,                 // Backend se aayi key
+                "amount": data.amount,           // Backend se aaya dynamic amount (Paise me)
+                "currency": "INR",
+                "name": "Shopmart Store",
+                "description": "E-Commerce Order Payment",
+                "order_id": data.order_id,       // Backend se aayi unique Order ID
+                "handler": function (response){
+                    // Payment successful hone par, success page par redirect karo 
+                    // aur payment_id sath me bhejo taaki success page par dikha sakein
+                    window.location.href = "/order-success?payment_id=" + response.razorpay_payment_id + "&order_id=" + data.order_id;
+                },
+                "prefill": {
+                    "name": "Prathmesh Pawar",
+                    "email": "user@example.com",
+                    "contact": "9999999999"
+                },
+                "theme": {
+                    "color": "#2874f0"
+                }
+            };
+
+            // Razorpay Popup Open karo
+            var rzp1 = new Razorpay(options);
+            
+            rzp1.on('payment.failed', function (response){
+                alert("Payment Failed: " + response.error.description);
+            });
+
+            rzp1.open();
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Server se connect karne me dikkat aa rahi hai bhai.");
+        }
+    }
+</script>
 {% endblock %}
